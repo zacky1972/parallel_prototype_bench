@@ -44,11 +44,11 @@ defmodule BinaryMergerBench do
   end
 
   bench "BinaryMerger.insert(h, i) as" do
-    BinaryMerger.insert([BinaryMergerHelper.element(1)], BinaryMergerHelper.element(2))
+    BinaryMerger.insert(BinaryMergerHelper.element(1), BinaryMergerHelper.element(2))
   end
 
   bench "BinaryMerger.insert(h, i) des" do
-    BinaryMerger.insert([BinaryMergerHelper.element(2)], BinaryMergerHelper.element(1))
+    BinaryMerger.insert(BinaryMergerHelper.element(2), BinaryMergerHelper.element(1))
   end
 
   bench "spawn" do
