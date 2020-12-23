@@ -3,15 +3,15 @@ defmodule BinaryMergerBench do
 
   @t 4
 
-  @ascending Enum.map(1..(@t * @t * @t), &MergerHelper.element(&1))
-  @descending Enum.map((@t * @t * @t)..1, &MergerHelper.element(&1))
-  @random 1..(@t * @t * @t) |> Enum.shuffle |> Enum.map(&MergerHelper.element(&1))
+  @ascending Enum.map(1..(@t * @t * @t), &MergerHelper.element(&1, 0))
+  @descending Enum.map((@t * @t * @t)..1, &MergerHelper.element(&1, 0))
+  @random 1..(@t * @t * @t) |> Enum.shuffle |> Enum.map(&MergerHelper.element(&1, 0))
 
-  @as1 Enum.map(1..2, &MergerHelper.element(&1))
-  @des1 Enum.map(2..1, &MergerHelper.element(&1))
+  @as1 Enum.map(1..2, &MergerHelper.element(&1, 0))
+  @des1 Enum.map(2..1, &MergerHelper.element(&1, 0))
 
-  @as10 Enum.map(1..10, &MergerHelper.element(&1))
-  @des10 Enum.map(10..1, &MergerHelper.element(&1))
+  @as10 Enum.map(1..10, &MergerHelper.element(&1, 0))
+  @des10 Enum.map(10..1, &MergerHelper.element(&1, 0))
 
   bench "insert in ascending order" do
   	Enum.reduce(@ascending, [], fn x, acc -> BinaryMerger.insert(acc, x) end)
@@ -72,7 +72,7 @@ defmodule BinaryMergerBench do
   #   end
   # end
 
-  bench "#{@t} parallel" do
+  bench "parallel (each #{@t} lists)" do
     1..@t
     |> Enum.map(fn i ->
       {spawn(ParallelBinaryMerger, :receive_insert, [
@@ -84,7 +84,7 @@ defmodule BinaryMergerBench do
       send(
         pid,
         1..@t
-        |> Enum.map(&MergerHelper.element(&1 + (i - 1) * @t))
+        |> Enum.map(&MergerHelper.element(&1 + (i - 1) * @t, ((&1 - 1) + (i - 1) * @t) * 1000))
         |> List.flatten()
       )
     end)
@@ -97,4 +97,31 @@ defmodule BinaryMergerBench do
       1000 -> raise("Timeout")
     end
   end
+
+  bench "parallel (each #{@t} lists) des" do
+    @t..1
+    |> Enum.map(fn i ->
+      {spawn(ParallelBinaryMerger, :receive_insert, [
+         self(),
+         @t..1 |> Enum.map(&(&1 + (i - 1) * @t))
+       ]), i}
+    end)
+    |> Enum.each(fn {pid, i} ->
+      send(
+        pid,
+        @t..1
+        |> Enum.map(&MergerHelper.element(&1 + (i - 1) * @t, ((&1 - 1) + (i - 1) * @t) * 1000))
+        |> List.flatten()
+      )
+    end)
+
+    ParallelBinaryMerger.receive_insert(self(), (@t * @t)..1)
+
+    receive do
+      result -> :ok
+    after
+      1000 -> raise("Timeout")
+    end
+  end
+
 end

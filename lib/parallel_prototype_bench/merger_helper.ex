@@ -1,6 +1,5 @@
 defmodule MergerHelper do
-  @list_1000 Enum.to_list(1..1000)
-  def element(id), do: [{id..id, 1000, @list_1000}]
+  def element(id, offset), do: [{id..id, 1000, Enum.to_list((1 + offset)..(1000 + offset))}]
 
   def echo(pid) do
   	send(pid, :ok)
