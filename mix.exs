@@ -22,7 +22,8 @@ defmodule ParallelPrototypeBench.MixProject do
   defp deps do
     [
       {:parallel_prototype, path: "../parallel_prototype"},
-      {:benchfella, "~> 0.3.5"}
+      {:benchfella, "~> 0.3.5"},
+      {:pelemay, "~> 0.0.14"}
     ]
   end
 end
