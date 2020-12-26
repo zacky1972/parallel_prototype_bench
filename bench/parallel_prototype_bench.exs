@@ -1,7 +1,7 @@
 defmodule ParallelPrototypeBBench do
   use Benchfella
 
-  @range_0x10000 1..0x10000
+  @range_0x10000 Enum.to_list(1..0x10000)
 
   bench "Enum.map(@range_0x10000, & &1 * 2)" do
   	Enum.map(@range_0x10000, & &1 * 2)
