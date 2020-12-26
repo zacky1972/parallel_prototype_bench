@@ -48,4 +48,8 @@ defmodule BasicListBench do
   bench "Enum.reverse(@list_10000)" do
   	Enum.reverse(@list_10000)
   end
+
+  bench "Enum.split(@list_10000, 1000)" do
+    Enum.split(@list_10000, 1000)
+  end
 end
