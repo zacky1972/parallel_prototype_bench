@@ -1,11 +1,11 @@
 defmodule BinaryMergerBench do
   use Benchfella
 
-  @t 4
+  @t 16
 
-  @ascending Enum.map(1..(@t * @t * @t), &MergerHelper.element(&1, 0))
-  @descending Enum.map((@t * @t * @t)..1, &MergerHelper.element(&1, 0))
-  @random 1..(@t * @t * @t) |> Enum.shuffle |> Enum.map(&MergerHelper.element(&1, 0))
+  @ascending Enum.map(1..(@t * @t), &MergerHelper.element(&1, 0))
+  @descending Enum.map((@t * @t)..1, &MergerHelper.element(&1, 0))
+  @random 1..(@t * @t) |> Enum.shuffle |> Enum.map(&MergerHelper.element(&1, 0))
 
   # @as1 Enum.map(1..2, &MergerHelper.element(&1, 0))
   # @des1 Enum.map(2..1, &MergerHelper.element(&1, 0))
