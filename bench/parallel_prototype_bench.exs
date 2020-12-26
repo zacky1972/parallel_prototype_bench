@@ -27,4 +27,8 @@ defmodule ParallelPrototypeBBench do
   bench "ParallelPrototype.pmap_chunk(@range_0x10000, pelemay_logistic_map_10)" do
     ParallelPrototype.pmap_chunk(@range_0x10000, &LogisticMap.logistic_map_10(&1), &LogisticMap.logistic_map_10_pelemay(&1), 8000)
   end
+
+  bench "Pelemay(@range_0x10000, pelemay_logistic_map_10)" do
+    LogisticMap.logistic_map_10_pelemay(@range_0x10000)
+  end
 end
