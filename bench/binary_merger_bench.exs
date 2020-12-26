@@ -7,11 +7,11 @@ defmodule BinaryMergerBench do
   @descending Enum.map((@t * @t * @t)..1, &MergerHelper.element(&1, 0))
   @random 1..(@t * @t * @t) |> Enum.shuffle |> Enum.map(&MergerHelper.element(&1, 0))
 
-  @as1 Enum.map(1..2, &MergerHelper.element(&1, 0))
-  @des1 Enum.map(2..1, &MergerHelper.element(&1, 0))
+  # @as1 Enum.map(1..2, &MergerHelper.element(&1, 0))
+  # @des1 Enum.map(2..1, &MergerHelper.element(&1, 0))
 
-  @as10 Enum.map(1..10, &MergerHelper.element(&1, 0))
-  @des10 Enum.map(10..1, &MergerHelper.element(&1, 0))
+  # @as10 Enum.map(1..10, &MergerHelper.element(&1, 0))
+  # @des10 Enum.map(10..1, &MergerHelper.element(&1, 0))
 
   bench "insert in ascending order" do
   	Enum.reduce(@ascending, [], fn x, acc -> BinaryMerger.insert(acc, x) end)
@@ -118,7 +118,7 @@ defmodule BinaryMergerBench do
     ParallelBinaryMerger.receive_insert(self(), (@t * @t)..1)
 
     receive do
-      result -> :ok
+      _result -> :ok
     after
       1000 -> raise("Timeout")
     end
